@@ -171,6 +171,7 @@ export default {
         height: 50px;
         border-radius: 5px;
         line-height: 50px;
+        font-size: 14px;
         text-align: center;
         border: 1px solid black;
         color: black;
