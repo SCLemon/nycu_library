@@ -39,6 +39,7 @@ function removeRoomReserve(target){
     roomModel.updateOne({'date.date':target.date ,'date.room.num':target.room,'date.room.detail.time':target.timeRegion},
         {
             $set: {
+                'date.room.detail.$.owner': '',
                 'date.room.detail.$.hasReserved': false
             }
         }

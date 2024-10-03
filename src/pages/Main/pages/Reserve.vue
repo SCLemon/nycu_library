@@ -109,6 +109,7 @@ export default {
                     idx:i-8,
                     hour:i,
                     time:`${i}:00 - ${i+1}:00`,
+                    owner:'',
                     hasReserved:false
                 })
             }
@@ -121,6 +122,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.showTime[idx]['hasReserved'] = true;
+                this.showTime[idx]['owner'] = jsCookie.get('nycuTk');
                 axios.post('/list/add',{
                     place:this.place,
                     timeRegion:this.showTime[idx]['time'],

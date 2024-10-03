@@ -16,6 +16,10 @@ const roomSchema = new mongoose.Schema({
                     idx: String,
                     hour:Number,
                     time: String,
+                    owner:{
+                        type:String,
+                        default:''
+                    },
                     hasReserved: Boolean
                 }
             ],
