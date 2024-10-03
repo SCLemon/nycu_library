@@ -1,17 +1,20 @@
-//导入 mongoose
+// 讀取使用者預約記錄
 const mongoose = require('mongoose');
 
-// 创建文档结构
+
 const listSchema = new mongoose.Schema({
     token:String,
     reserve:[{
+        id:String,
         date:String,
-        content:String
+        room:String,
+        timeRegion:String,
+        content:String,
     }]
 });
 
-//创建模型对象
+
 const listModel = mongoose.model('list', listSchema);
 
-//暴露
+
 module.exports = listModel;

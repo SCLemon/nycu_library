@@ -12,8 +12,8 @@
               <p :class="isSelectedDate(data.day) ? 'is-selected' : ''">
                 <div class="date">{{ data.day.split('-').slice(1).join('/') }}</div>
                 <div class="contentBox">
-                  <p v-for="(obj,id) in userData" :key="id" class="content">
-                    <span @click="deleteReserve(data.day,obj.content,obj.id)" v-if="obj.date == data.day">{{ obj.content }}</span>
+                  <p v-for="(obj,id) in userData" :key="id" class="content" @click="deleteReserve(data.day,obj.content,obj.id,obj)">
+                    <span v-if="obj.date == data.day">{{ obj.content }}</span>
                   </p>
                 </div>
               </p>
@@ -57,21 +57,27 @@ export default {
       isSelectedDate(date){
         return this.userData.some(item=>item.date == date);
       },
-      deleteReserve(date,content,id){
+      deleteReserve(date,content,id,target){
         this.$confirm(`確認是否刪除 ${date} ${content.match(/\d+/)[0]} 空間預約？`, '提示', {
           confirmButtonText: '確定',
           cancelButtonText: '取消',
           type: 'warning'
         })
         .then(() => {
-          this.userData=this.userData.filter(item=>item.id!=id);
-          axios.post('/list/removeReserve',{list:this.userData},
+          this.userData = this.userData.filter(item=>item.id!=id);
+          axios.post('/list/removeReserve',{
+            target:target,
+            list:this.userData
+          },
           {
             headers:{
               token:jsCookie.get('nycuTk')
             }
           })
-          .then(res=>{}).catch(e=>{})
+          .then(res=>{
+            this.$bus.$emit('handleAlert','預約刪除提示',res.data.status,res.data.msg)
+          })
+          .catch(e=>{})
           .finally(()=>{
             this.getData()
           })

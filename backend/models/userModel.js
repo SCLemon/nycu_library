@@ -1,7 +1,7 @@
-//导入 mongoose
+// 讀取使用者個人資料
 const mongoose = require('mongoose');
 
-// 创建文档结构
+
 const userSchema = new mongoose.Schema({
     token:String,
     mail:{
@@ -38,8 +38,8 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-//创建模型对象
+
 const userModel = mongoose.model('users', userSchema);
 
-//暴露
+
 module.exports = userModel;
