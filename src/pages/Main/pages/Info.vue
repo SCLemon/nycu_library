@@ -10,7 +10,7 @@
         </div>
         <div class="form_each">
             <div class="input_title">學號：</div>
-            <el-input class="input" v-model="user.stuID" placeholder="請輸入學號"></el-input>
+            <el-input class="input" v-model="user.stuID" placeholder="請輸入學號" :disabled="!writeFirst"></el-input>
         </div>
         <div class="form_each">
             <div class="input_title">性別：</div>
@@ -40,6 +40,7 @@ export default {
     name:'Info',
     data(){
         return{
+            tempStuId:'', // 檢查學號是否被更動。
             user:{
                 name:'',
                 stuID:'',
@@ -49,6 +50,7 @@ export default {
                 phone:''
             },
             isLoading:false,
+            writeFirst:true,
         }
     },
     computed:{
@@ -65,20 +67,31 @@ export default {
             axios.get(`/info/get/${jsCookie.get('nycuTk')}`)
             .then(res=>{
                 this.user = res.data;
+                if(this.user.stuID!=''){
+                    this.writeFirst= false;
+                    this.tempStuId = this.user.stuID;
+                }
                 if(!res.data.readPermission) this.$bus.$emit('handleAlert','個人資料維護提示','warning','您尚未完成個人資料填寫！');
             })
         },
         save(){
             if(this.checkInput){
-                axios.post(`/info/revise`,this.user,{
-                    headers:{
-                        token:jsCookie.get('nycuTk')
-                    }
-                })
-                .then(res=>{
-                    this.getInfo();
-                    this.$bus.$emit('handleAlert','個人資料維護提示',res.data.status,res.data.msg)
-                })
+                if(!this.writeFirst && (this.tempStuId != this.user.stuID)) return; // 防止學號被更動。
+                this.$confirm(`${this.writeFirst?'資料儲存後，學號即無法修改！':'確認是否儲存個人資料？'}`, '提示', {
+                    confirmButtonText: '確定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.post(`/info/revise`,this.user,{
+                        headers:{
+                            token:jsCookie.get('nycuTk')
+                        }
+                    })
+                    .then(res=>{
+                        this.getInfo();
+                        this.$bus.$emit('handleAlert','個人資料維護提示',res.data.status,res.data.msg)
+                    })
+                }).catch(() => {})
             }
             else this.$bus.$emit('handleAlert','資料填寫提示','warning','資料不可為空。')
         }

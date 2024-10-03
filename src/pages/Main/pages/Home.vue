@@ -51,7 +51,7 @@ export default {
         .then(res=>{
           this.userData = res.data;
           console.log((res.data).sort((a,b)=>{
-            return a.timeRegion[0] - b.timeRegion[0]
+            return a.timeRegion.split(':')[0] - b.timeRegion.split(':')[0]
           }))
         })
       },
