@@ -32,11 +32,15 @@ export default {
     name:'Home',
     data(){
       return{
-        userData:[]
+        userData:[],
+        timer:0,
       }
     },
     mounted(){
       this.getData();
+      this.timer = setInterval(() => {
+        this.getData();
+      }, 5000);
       this.$nextTick(()=>{
         this.changeBtnText()
       })
@@ -84,6 +88,9 @@ export default {
         })
         .catch(() => {});
       }
+    },
+    beforeDestroy(){
+      clearInterval(this.timer);
     }
 }
 </script>
@@ -117,7 +124,7 @@ export default {
     overflow-y:scroll;
   }
   .content:hover{
-    background: rgb(219, 219, 219);
+    background: #9acaf9;
     color: white;
   }
 </style>

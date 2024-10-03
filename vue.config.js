@@ -4,7 +4,6 @@ module.exports = defineConfig({
     lintOnSave: false,
     publicPath: './',
     devServer:{
-        https:true,
         proxy: {
             '/verify': {
                 target: 'http://127.0.0.1:3999',

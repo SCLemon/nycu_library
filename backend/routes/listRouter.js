@@ -18,7 +18,6 @@ router.get('/list/getReserve/:token',(req,res)=>{
 router.post('/list/removeReserve',(req,res)=>{
     var token = req.headers['token'];
     var target = req.body.target;
-    console.log(target)
     listModel.findOneAndUpdate({token:token},{reserve:req.body.list},{upsert:true})
     .then((data,err)=>{
         removeRoomReserve(target)

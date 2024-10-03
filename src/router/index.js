@@ -60,7 +60,7 @@ router.beforeEach((to, from, next) => {
         .then(res=>{
             if(res.data) next();
             else{
-                alert('個人資料填寫完畢後方可使用完整功能。')
+                if(from.path !== '/login') alert('個人資料填寫完畢後方可使用完整功能。')
                 next('/main/info')
             }
         })
