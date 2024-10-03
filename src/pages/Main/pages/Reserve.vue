@@ -43,7 +43,7 @@ export default {
         return{
             pickerOptions: {
                 disabledDate(time) {
-                    return time.getTime() < Date.now()-86400000;
+                    return (time.getTime() < Date.now()-86400000) || (Date.now()+86400000*13<time.getTime());
                 },
             },
             place:{

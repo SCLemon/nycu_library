@@ -16,7 +16,7 @@
             <el-button type="primary" class="btn" @click="login()" :loading="isloading">{{ isloading?'登入中...':'註冊 / 登入' }}</el-button>
         </div>
     </div>
-    <div class="text">本系統目前由國立清華大學工科四年級「林英豪」所設計以及維護。</div>
+    <div class="text">本系統目前由國立清華大學工科系四年級「林英豪」所設計以及維護。</div>
     <div class="text">採用 Vue 以及 MongoDB 技術開發而成，可以有效的轉移至各校作使用。</div>
     <div class="text">聯絡方式：blc0000421@gmail.com</div>
   </div>
@@ -92,15 +92,24 @@ export default {
         color: white;
     }
     .title{
-        font-size: 48px;
+        font-size: 58px;
         font-weight: bolder;
         text-align: center;
         line-height: 100px;
+        background: linear-gradient(135deg, #FFFFFF, #E0E0E0, #C0C0C0, #F0F0F0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 3px 3px 10px rgba(255, 255, 255, 0.891), 2px 2px 4px rgba(0, 0, 0, 0.1);
+        
     }
     .subTitle{
         font-size: 24px;
         text-align: center;
         line-height: 40px;
+        background: linear-gradient(135deg, #FFFFFF, #E0E0E0, #C0C0C0, #F0F0F0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 3px 3px 10px rgba(255, 255, 255, 0.891), 2px 2px 5px rgba(0, 0, 0, 0.1);
     }
     .box{
         width: 530px;
