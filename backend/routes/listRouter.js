@@ -10,7 +10,8 @@ router.get('/list/getReserve/:token',(req,res)=>{
     var token = req.params.token
     listModel.findOne({token:token})
     .then((data,err)=>{
-        res.send(data.reserve)
+        if(data) res.send(data.reserve)
+        else res.send([])
     })
 })
 
