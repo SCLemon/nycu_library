@@ -36,11 +36,12 @@
 <script>
 import axios from 'axios';
 import jsCookie from 'js-cookie';
-import {format, isAfter} from 'date-fns'
+import {isAfter} from 'date-fns'
 export default {
     name:'Reserve',
     data(){
         return{
+            timer:0,
             pickerOptions: {
                 disabledDate(time) {
                     return (time.getTime() < Date.now()-86400000) || (Date.now()+86400000*13<time.getTime());
@@ -68,6 +69,11 @@ export default {
             showTime:[]
         }
     },
+    mounted(){
+        this.timer = setInterval(() => {
+            if(this.place.type!='' && this.place.num!='') this.getData();
+        }, 5000);
+    },
     watch:{
         'place.type':{
             deep:true,
@@ -79,13 +85,7 @@ export default {
             deep:true,
             handler(){
                 this.showTime = [];
-                if(this.place.type!='' && this.place.num!=''){
-                    axios.get(`/list/get/${JSON.stringify(this.place)}`)
-                    .then(res=>{
-                        if(res.data == '') this.showTime = this.initTimes();
-                        else this.showTime = res.data.date.room.detail;
-                    })
-                }
+                if(this.place.type!='' && this.place.num!='') this.getData();
             }
         }
     },
@@ -102,6 +102,13 @@ export default {
         }
     },
     methods:{
+        getData(){
+            axios.get(`/list/get/${JSON.stringify(this.place)}`)
+            .then(res=>{
+                if(res.data == '') this.showTime = this.initTimes();
+                else this.showTime = res.data.date.room.detail;
+            })
+        },
         initTimes(){ // 初始化第一次時間選擇 <-- 可自行調整
             var output = [];
             for(var i=8 ;i <= 20; i++){ // 8:00~21:00
@@ -133,9 +140,14 @@ export default {
                     }
                 }).then(res=>{
                     this.$bus.$emit('handleAlert','空間預約提示',res.data.status,res.data.msg);
+                }).finally(()=>{
+                    this.getData();
                 });
             }).catch(() => {})
         }
+    },
+    beforeDestroy(){
+        clearInterval(this.timer);
     }
 }
 </script>

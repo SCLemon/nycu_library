@@ -64,7 +64,22 @@ router.post('/list/add',(req,res)=>{
     var place = req.body.place;
     var timeRegion = req.body.timeRegion;
     var detail = req.body.detail;
+    roomModel.findOne({'date.date':format(place.date,'yyyy-MM-dd'),'date.room.num': place.num})
+    .then((existData)=>{
+        if(existData){
+            const hasReserved = existData.date.room.detail.some(detail => {
+                return detail.hasReserved === true && detail.time == timeRegion
+            });
+            if(hasReserved) res.send({ status: 'error', msg: '該空間已被預約！' });
+            else updateReserved(res,token,place,timeRegion,detail);
+        }
+        else updateReserved(res,token,place,timeRegion,detail);
+    })
 
+})
+
+// 執行預約
+function updateReserved(res,token,place,timeRegion,detail){
     roomModel.findOneAndUpdate(
         { 'date.date':format(place.date,'yyyy-MM-dd'),'date.room.num': place.num },
         {
@@ -83,7 +98,7 @@ router.post('/list/add',(req,res)=>{
         console.log(e)
         res.send({status:'error', msg:'空間預約失敗，請洽詢管理人員！'})
     })
-})
+}
 
 // 空間預約同步至使用者紀錄
 function addUserReserveList(token,place,timeRegion){
