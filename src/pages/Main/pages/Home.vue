@@ -12,7 +12,7 @@
               <p :class="isSelectedDate(data.day) ? 'is-selected' : ''">
                 <div class="date">{{ data.day.split('-').slice(1).join('/') }}</div>
                 <div class="contentBox">
-                  <p v-for="(obj,id) in userData" :key="id" class="content" @click="deleteReserve(data.day,obj.content,obj.id,obj)">
+                  <p v-for="(obj,id) in userData" :key="id" class="content" @click="compareDate(data.day)?deleteReserve(data.day,obj.content,obj.id,obj):showDeniedMsg()">
                     <span v-if="obj.date == data.day">{{ obj.content }}</span>
                   </p>
                 </div>
@@ -27,7 +27,7 @@
 <script>
 import axios from 'axios'
 import jsCookie from 'js-cookie'
-
+import { isAfter } from 'date-fns'
 export default {
     name:'Home',
     data(){
@@ -46,6 +46,12 @@ export default {
       })
     },
     methods:{
+      showDeniedMsg(){
+        this.$bus.$emit('handleAlert','刪除預約提示','warning','先前預約記錄不可刪除！');
+      },
+      compareDate(date){
+        return isAfter(date,new Date());
+      },
       getData(){
         axios.get(`/list/getReserve/${jsCookie.get('nycuTk')}`)
         .then(res=>{
