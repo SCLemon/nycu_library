@@ -25,7 +25,14 @@ router.get('/info/router/:token',(req,res)=>{
     var token = req.params.token;
     userModel.findOne({token:token})
     .then((data,err)=>{
-        res.send(data.readPermission);
+        if(data) res.send({
+            status:'success',
+            msg:data.readPermission
+        });
+        else res.send({
+            status:'error',
+            msg:'非法使用者'
+        })
     })
 })
 

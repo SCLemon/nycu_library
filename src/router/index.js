@@ -58,10 +58,16 @@ router.beforeEach((to, from, next) => {
     else if(to.path.includes('/main') & to.path !=='/main/info'){
         axios.get(`/info/router/${token}`)
         .then(res=>{
-            if(res.data) next();
+            if(res.data.status == 'error'){
+                next('/login');
+                jsCookie.remove('nycuTk');
+            }
             else{
-                if(from.path !== '/login') alert('個人資料填寫完畢後方可使用完整功能。')
-                next('/main/info')
+                if(res.data.msg) next();
+                else{
+                    if(from.path !== '/login') alert('個人資料填寫完畢後方可使用完整功能。')
+                    next('/main/info')
+                }
             }
         })
     }
