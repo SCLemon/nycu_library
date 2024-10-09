@@ -56,9 +56,9 @@ export default {
         axios.get(`/list/getReserve/${jsCookie.get('nycuTk')}`)
         .then(res=>{
           this.userData = res.data;
-          console.log((res.data).sort((a,b)=>{
+          (res.data).sort((a,b)=>{
             return a.timeRegion.split(':')[0] - b.timeRegion.split(':')[0]
-          }))
+          })
         })
       },
       changeBtnText(){

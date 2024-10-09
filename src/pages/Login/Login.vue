@@ -67,7 +67,6 @@ export default {
                 .then(res=>{
                     if(res.data.status=='success'){
                         jsCookie.set('nycuTk',res.data.token);
-                        console.log(res.data.token)
                         this.$router.replace('/main').catch(()=>{});
                     }
                     else this.$bus.$emit('handleAlert','登入失敗','error',res.data.message);
